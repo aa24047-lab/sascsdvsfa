@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Loading...</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+    }
+
+    #start {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #000;
+        color: white;
+        font-family: sans-serif;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    #shock {
+        position: fixed;
+        inset: 0;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background: #000;
+        z-index: 20;
+    }
+
+    #shock img {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+    }
+
+    #flash {
+        position: fixed;
+        inset: 0;
+        background: white;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 30;
+    }
+
+    .shake {
+        animation: shake 0.08s infinite;
+    }
+
+    @keyframes shake {
+        0%   { transform: translate(0, 0); }
+        25%  { transform: translate(-8px, 5px); }
+        50%  { transform: translate(7px, -6px); }
+        75%  { transform: translate(-5px, -4px); }
+        100% { transform: translate(5px, 6px); }
+    }
+</style>
+</head>
+
+<body>
+
+<div id="start">
+    CLICK TO ENTER
+</div>
+
+<div id="shock">
+    <img src="horror.jpg" alt="">
+</div>
+
+<div id="flash"></div>
+
+<audio id="scream" src="scream.mp3" preload="auto"></audio>
+
+<script>
+const start = document.getElementById("start");
+const shock = document.getElementById("shock");
+const flash = document.getElementById("flash");
+const scream = document.getElementById("scream");
+
+start.addEventListener("click", () => {
+
+    // 最初の画面を消す
+    start.style.display = "none";
+
+    // 少し待ってからショック演出
+    setTimeout(() => {
+
+        // 白フラッシュ
+        flash.style.transition = "opacity 0.05s";
+        flash.style.opacity = "1";
+
+        setTimeout(() => {
+
+            flash.style.opacity = "0";
+
+            // 画像表示
+            shock.style.display = "flex";
+
+            // 画面揺れ
+            shock.classList.add("shake");
+
+            // 音声再生
+            scream.volume = 1.0;
+            scream.play().catch(() => {});
+
+            // 3秒後に揺れを停止
+            setTimeout(() => {
+                shock.classList.remove("shake");
+            }, 3000);
+
+        }, 80);
+
+    }, 1200);
+});
+</script>
+
+</body>
+</html>
